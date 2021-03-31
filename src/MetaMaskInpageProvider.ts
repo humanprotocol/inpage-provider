@@ -208,6 +208,7 @@ export default class MetaMaskInpageProvider extends SafeEventEmitter {
     this._handleChainChanged = this._handleChainChanged.bind(this);
     this._handleDisconnect = this._handleDisconnect.bind(this);
     this._handleStreamDisconnect = this._handleStreamDisconnect.bind(this);
+    this._handleCaptchaTokenReceived = this._handleCaptchaTokenReceived.bind(this);
     this._handleUnlockStateChanged = this._handleUnlockStateChanged.bind(this);
     this._sendSync = this._sendSync.bind(this);
     this._rpcRequest = this._rpcRequest.bind(this);
@@ -266,6 +267,8 @@ export default class MetaMaskInpageProvider extends SafeEventEmitter {
         this._handleUnlockStateChanged(params);
       } else if (method === 'metamask_chainChanged') {
         this._handleChainChanged(params);
+      } else if (method === 'metamask_captchaTokenReceived') {
+        this._handleCaptchaTokenReceived(params);
       } else if (EMITTED_NOTIFICATIONS.includes(method)) {
         // deprecated
         // emitted here because that was the original order
@@ -594,6 +597,10 @@ export default class MetaMaskInpageProvider extends SafeEventEmitter {
         }
       }
     }
+  }
+
+  private _handleCaptchaTokenReceived({ token }: {token?: string; }={}) {
+    this.emit('captchaTokenReceived', token);
   }
 
   /**
